@@ -1,0 +1,34 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Runtime data
+data/
+logs/
+*.sqlite3
+*.db
+
+# Python / IDE
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.idea/
+.vscode/
+
+# Personal and export artifacts
+*.pdf
+*.docx
+*.zip
+*.png
+*.jpg
+*.jpeg
+tmp/
+resume*/
+*简历*

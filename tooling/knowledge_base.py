@@ -64,7 +64,7 @@ class KnowledgeBase:
         # Docker 已预下载模型，本地运行首次使用可能触发下载。
         self._collection = self._client.get_or_create_collection(
             name=self.COLLECTION_NAME,
-            metadata={"description": "EchoMind RAG 知识库"},
+            metadata={"description": "CasePilot RAG 知识库"},
         )
 
         # 如果知识库为空，导入默认文档

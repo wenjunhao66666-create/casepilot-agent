@@ -114,9 +114,9 @@ class AgentStats:
 
     def set_penalty(self, penalty):
         self.monitor_penalty = penalty
-        threshold = min(max(_env_float("ECHOMIND_MONITOR_FALLBACK_PENALTY", 0.5), 0.01), 0.9)
+        threshold = min(max(_env_float("CASEPILOT_MONITOR_FALLBACK_PENALTY", 0.5), 0.01), 0.9)
         if penalty >= threshold and not self.retry_at:
-            self.retry_at = time.monotonic() + max(1, _env_float("ECHOMIND_MONITOR_COOLDOWN_SECONDS", 60))
+            self.retry_at = time.monotonic() + max(1, _env_float("CASEPILOT_MONITOR_COOLDOWN_SECONDS", 60))
 
     def record(self, success, ms, request_id=None):
         if self.probe_running and request_id == self.probe_owner:
@@ -127,7 +127,7 @@ class AgentStats:
                 self.retry_at = 0.0
                 self.monitor_penalty = 0.0
             else:
-                self.retry_at = time.monotonic() + max(1, _env_float("ECHOMIND_MONITOR_COOLDOWN_SECONDS", 60))
+                self.retry_at = time.monotonic() + max(1, _env_float("CASEPILOT_MONITOR_COOLDOWN_SECONDS", 60))
         self.samples.append((time.monotonic(), success, ms))
         if self.observer:
             self.observer(ms)
@@ -500,7 +500,7 @@ class GeneralAgent(BaseAgent):
         max_tokens=900,
     )
     system_prompt = (
-        "你是 EchoMind 智能客服。友好、简洁地回答用户问题。"
+        "你是 CasePilot 智能客服。友好、简洁地回答用户问题。"
         "如果问题超出你的能力范围，明确说明并建议转接专业客服。"
     )
 
@@ -676,8 +676,8 @@ class ResponseComposer:
         try:
             response = await self._client.messages.create(
                 model=self._model,
-                max_tokens=_env_int("ECHOMIND_COMPOSER_MAX_TOKENS", 1000),
-                temperature=_env_float("ECHOMIND_COMPOSER_TEMPERATURE", 0.1),
+                max_tokens=_env_int("CASEPILOT_COMPOSER_MAX_TOKENS", 1000),
+                temperature=_env_float("CASEPILOT_COMPOSER_TEMPERATURE", 0.1),
                 messages=[{"role": "user", "content": prompt}],
             )
             content = extract_text_content(response.content).strip()
@@ -742,7 +742,7 @@ class AgentOrchestrator:
         self._skill_manager = skill_manager
         self._composer = ResponseComposer(client, model, skill_manager)
         self._shared_tools: Dict[str, AgentToolSpec] = {}
-        self._recent_tool_traces = deque(maxlen=_env_int("ECHOMIND_TOOL_TRACE_MAX", 200))
+        self._recent_tool_traces = deque(maxlen=_env_int("CASEPILOT_TOOL_TRACE_MAX", 200))
 
         # Agent 池：每种类型可有多个实例（水平扩展）
         self._pool: Dict[AgentType, List[BaseAgent]] = {
@@ -765,7 +765,7 @@ class AgentOrchestrator:
         可使用更强模型，通用接待可使用更快模型，升级节点本身不需要调用 LLM。
         """
         profile = agent_cls.profile
-        env_name = f"ECHOMIND_{agent_cls.agent_type.value.upper()}_MODEL"
+        env_name = f"CASEPILOT_{agent_cls.agent_type.value.upper()}_MODEL"
         model = os.getenv(env_name, "").strip() or profile.model
         configured_profile = replace(profile, model=model) if model else profile
         return agent_cls(client, default_model, skill_manager, profile=configured_profile)

@@ -175,7 +175,7 @@ class StandardMCPClient:
                             connection.refresh.set()
                     session = await stack.enter_async_context(ClientSession(read, write,
                         read_timeout_seconds=timedelta(seconds=config.timeout_s), message_handler=on_message,
-                        client_info=Implementation(name="EchoMind", version="2.0")))
+                        client_info=Implementation(name="CasePilot", version="2.0")))
                     initialized = await asyncio.wait_for(session.initialize(), config.timeout_s)
                     connection.refresh.clear()
                     catalog = await self._discover(session, config.timeout_s)

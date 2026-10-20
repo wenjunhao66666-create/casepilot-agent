@@ -48,10 +48,14 @@ def test_cancelled_waiter_does_not_leak_keyed_lock():
 
 def test_redis_lease_renews_and_releases():
     async def run():
-        lock = SimpleNamespace(acquire=AsyncMock(return_value=True), extend=AsyncMock(return_value=True), release=AsyncMock())
+        renewed = asyncio.Event()
+        async def extend(*args, **kwargs):
+            renewed.set()
+            return True
+        lock = SimpleNamespace(acquire=AsyncMock(return_value=True), extend=AsyncMock(side_effect=extend), release=AsyncMock())
         client = SimpleNamespace(lock=lambda *a, **kw: lock)
         async with redis_lease(client, 'key', lease_s=0.03):
-            await asyncio.sleep(0.025)
+            await asyncio.wait_for(renewed.wait(), timeout=1)
         assert lock.extend.await_count >= 1
         assert lock.release.await_count == 1
     asyncio.run(run())

@@ -80,7 +80,7 @@ def test_partial_report_excludes_failed_scores_and_preserves_baseline(tmp_path):
         ev._judge, _ = judge_for(response(json.dumps(VALID)))
         complete = await ev.run(dialog_cases=[{'question':'问题'}])
         assert complete.status == 'complete'
-        baseline = ev._baseline_path.read_text()
+        baseline = ev._baseline_path.read_text(encoding='utf-8')
         ev._judge, _ = judge_for(response(json.dumps(VALID)), response('{}'), response('{}'))
         partial = await ev.run(dialog_cases=[{'question':'问题'}, {'question':'第二个问题'}])
         assert partial.status == 'partial'
@@ -89,16 +89,16 @@ def test_partial_report_excludes_failed_scores_and_preserves_baseline(tmp_path):
         assert partial.pass_rate == 1.0
         assert partial.results[1].scores == {}
         assert partial.regressions == []
-        assert ev._baseline_path.read_text() == baseline
+        assert ev._baseline_path.read_text(encoding='utf-8') == baseline
         ev._judge, _ = judge_for(response('{}'), response('{}'))
         failed = await ev.run(dialog_cases=[{'question':'问题'}])
         assert failed.status == 'failed' and failed.valid_total == 0
         assert failed.avg_scores == {}
         assert not any('所有指标均达标' in s for s in failed.recommendations)
-        assert ev._baseline_path.read_text() == baseline
+        assert ev._baseline_path.read_text(encoding='utf-8') == baseline
         data = json.loads(baseline)
         data['results'][0]['metadata']['judge_failed'] = True
-        ev._baseline_path.write_text(json.dumps(data))
+        ev._baseline_path.write_text(json.dumps(data), encoding='utf-8')
         assert ev._load_baseline() is None
     asyncio.run(run())
 

@@ -1,0 +1,9 @@
+[
+  {"id":"greeting","message":"你好","allowed_primary_agents":["general"]},
+  {"id":"login-401","message":"登录接口返回401，应该怎么排查？","allowed_primary_agents":["technical"],"required_agents":["technical"]},
+  {"id":"duplicate-charge","message":"同一个订阅订单今天被重复扣款99元，需要核对什么信息？","allowed_primary_agents":["billing"],"required_agents":["billing"]},
+  {"id":"invoice","message":"我需要给订阅订单开公司发票，要提供哪些信息？","allowed_primary_agents":["billing"]},
+  {"id":"compound","message":"登录接口返回401，同一笔订阅又被重复扣款99元，请分别帮我排查。","allowed_primary_agents":["technical","billing"],"required_agents":["technical","billing"]},
+  {"id":"policy-rag","message":"请查询知识库，说明CasePilot演示订阅的退款申请规则，不要凭空推测。","allowed_primary_agents":["billing","general"],"required_tools":["search_knowledge_base"],"requires_knowledge":true},
+  {"id":"handoff","message":"请立即转人工客服处理这个问题。","allowed_primary_agents":["escalation"],"requires_escalation":true}
+]

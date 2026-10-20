@@ -6,14 +6,14 @@ import os
 
 
 def identity(authorization):
-    raw = os.getenv('ECHOMIND_API_TOKENS', '').strip()
+    raw = os.getenv('CASEPILOT_API_TOKENS', '').strip()
     if not raw:
-        if os.getenv('ECHOMIND_ENV', 'development') == 'production':
-            raise ValueError('production 模式必须设置 ECHOMIND_API_TOKENS')
+        if os.getenv('CASEPILOT_ENV', 'development') == 'production':
+            raise ValueError('production 模式必须设置 CASEPILOT_API_TOKENS')
         return None
     entries = json.loads(raw)
     if not isinstance(entries, dict) or not entries:
-        raise ValueError('ECHOMIND_API_TOKENS 必须为非空对象')
+        raise ValueError('CASEPILOT_API_TOKENS 必须为非空对象')
     for token, account in entries.items():
         if len(token) < 24 or not isinstance(account, dict) or not isinstance(account.get('user_id'), str) or not account.get('user_id') or account.get('role') not in ('user', 'admin'):
             raise ValueError('API Token 配置无效')

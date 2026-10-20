@@ -1,10 +1,11 @@
-# EchoMind Skills 文档
+# CasePilot Skills 文档
 
-EchoMind 启动时会从 `ECHOMIND_SKILLS_DIR` 读取 Skills，并在匹配用户请求时注入到对应 Agent 的 system prompt。Skills 适合维护业务处理规范、客服话术、技术排障 SOP、账单审核边界、升级规则和禁止事项。
+CasePilot 启动时会从 `CASEPILOT_SKILLS_DIR` 读取 Skills，并在匹配用户请求时注入到对应 Agent 的 system prompt。Skills 适合维护业务处理规范、客服话术、技术排障 SOP、账单审核边界、升级规则和禁止事项。
 
-当前内置三类 Skills：
+当前内置四类 Skills：
 
 ```text
+skills/00_subscription_triage/SKILL.md    # 订阅分诊：复合诉求拆解、证据要求和交接规范
 skills/general_customer_service/SKILL.md  # 通用客服：接待、澄清、分流、投诉和转人工
 skills/technical_support/SKILL.md         # 技术支持：故障排查、接口错误、部署配置和安全边界
 skills/billing_support/SKILL.md           # 账单服务：扣款、退款、发票、订阅和财务审核

@@ -113,11 +113,11 @@ def test_read_only_rejects_write_and_unspecified_tools():
 
 
 def test_access_tokens_bind_identity_and_production_fails_closed(monkeypatch):
-    monkeypatch.delenv('ECHOMIND_API_TOKENS',raising=False)
-    monkeypatch.setenv('ECHOMIND_ENV','production')
+    monkeypatch.delenv('CASEPILOT_API_TOKENS',raising=False)
+    monkeypatch.setenv('CASEPILOT_ENV','production')
     with pytest.raises(ValueError): identity('')
     token = 'test-token-with-at-least-24-characters'
-    monkeypatch.setenv('ECHOMIND_API_TOKENS',json.dumps({token:{'user_id':'u1','role':'user'}}))
+    monkeypatch.setenv('CASEPILOT_API_TOKENS',json.dumps({token:{'user_id':'u1','role':'user'}}))
     assert identity('Bearer '+token)['user_id'] == 'u1'
     assert identity('Bearer wrong') == {}
 
